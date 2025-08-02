@@ -724,26 +724,26 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
         break;
     }
 
-    Widget marquee = ListView.builder(
-      controller: _controller,
-      scrollDirection: widget.scrollAxis,
-      reverse: widget.textDirection == TextDirection.rtl,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (_, i) {
-        final text = i.isEven
-            ? Text(
-                widget.text,
-                style: widget.style,
-                textScaler: widget.textScaleFactor != null
-                    ? TextScaler.linear(widget.textScaleFactor!)
-                    : null,
-              )
-            : _buildBlankSpace();
-        return alignment == null
-            ? text
-            : Align(alignment: alignment, child: text);
-      },
-    );
+    Widget marquee = SingleChildScrollView(
+        controller: _controller,
+        scrollDirection: widget.scrollAxis,
+        reverse: widget.textDirection == TextDirection.rtl,
+        physics: NeverScrollableScrollPhysics(),
+        child: Row(
+            children: List.generate(widget.text.length, (i) {
+          final text = i.isEven
+              ? Text(
+                  widget.text,
+                  style: widget.style,
+                  textScaler: widget.textScaleFactor != null
+                      ? TextScaler.linear(widget.textScaleFactor!)
+                      : null,
+                )
+              : _buildBlankSpace();
+          return alignment == null
+              ? text
+              : Align(alignment: alignment, child: text);
+        })));
 
     return kIsWeb ? marquee : _wrapWithFadingEdgeScrollView(marquee);
   }
@@ -757,11 +757,11 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   }
 
   Widget _wrapWithFadingEdgeScrollView(Widget child) {
-    return FadingEdgeScrollView.fromScrollView(
+    return FadingEdgeScrollView.fromSingleChildScrollView(
       gradientFractionOnStart:
           !showFading ? 0.0 : widget.fadingEdgeStartFraction,
       gradientFractionOnEnd: !showFading ? 0.0 : widget.fadingEdgeEndFraction,
-      child: child as ScrollView,
+      child: child as SingleChildScrollView,
     );
   }
 }

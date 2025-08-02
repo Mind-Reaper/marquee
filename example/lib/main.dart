@@ -60,7 +60,6 @@ class _MyAppState extends State<MyApp> {
       showFadingOnlyWhenScrolling: true,
       fadingEdgeStartFraction: 0.1,
       fadingEdgeEndFraction: 0.1,
-      numberOfRounds: 3,
       startPadding: 10,
       accelerationDuration: Duration(seconds: 1),
       accelerationCurve: Curves.linear,
@@ -73,7 +72,7 @@ class _MyAppState extends State<MyApp> {
   Widget _wrapWithStuff(Widget child) {
     return Padding(
       padding: EdgeInsets.all(16),
-      child: Container(height: 50, color: Colors.white, child: child),
+      child: Container(color: Colors.white, child: child),
     );
   }
 }
